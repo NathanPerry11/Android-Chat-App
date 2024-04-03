@@ -1,5 +1,6 @@
 package com.example.loginscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +8,9 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,8 @@ public class ChatActivity extends AppCompatActivity {
     private EditText messageInput;
     private Button sendButton;
 
+    private FloatingActionButton BackBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +31,7 @@ public class ChatActivity extends AppCompatActivity {
         messagesRecyclerView = findViewById(R.id.messages_recycler_view);
         messageInput = findViewById(R.id.message_input);
         sendButton = findViewById(R.id.send_button);
+        BackBtn = (FloatingActionButton)findViewById(R.id.BackFAB);
 
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MessagesAdapter(messageList);
@@ -41,6 +48,16 @@ public class ChatActivity extends AppCompatActivity {
                     messageInput.setText("");
                     messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to the bottom
                 }
+            }
+        });
+        //Redirect to select chat on back button click
+        BackBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //Redirect to Create User page
+                Intent intent = new Intent(ChatActivity.this, SelectChat.class);
+                startActivity(intent);
+
             }
         });
 

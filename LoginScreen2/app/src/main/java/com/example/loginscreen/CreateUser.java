@@ -1,9 +1,23 @@
 package com.example.loginscreen;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -11,37 +25,32 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.loginscreen.databinding.ActivityCreateUserBinding;
 
 public class CreateUser extends AppCompatActivity {
-
-    private AppBarConfiguration appBarConfiguration;
-private ActivityCreateUserBinding binding;
-
+    FloatingActionButton Backbtn;
+    //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //This stuff is auto generated
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_create_user);
 
-     binding = ActivityCreateUserBinding.inflate(getLayoutInflater());
-     setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_create_user);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        //redirect to the login page when you click the back button
+        Backbtn = (FloatingActionButton) findViewById(R.id.BackFAB);
+        Backbtn.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+            public void onClick(View view){
+                //Redirect to Create User page
+                Intent intent = new Intent(CreateUser.this, MainActivity.class);
+                startActivity(intent);
+
             }
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.CreateHome), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_create_user);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
 }

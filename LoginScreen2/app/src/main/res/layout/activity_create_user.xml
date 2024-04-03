@@ -1,35 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryDark"
+    android:id="@+id/CreateHome"
     android:fitsSystemWindows="true"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     tools:context=".CreateUser">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="145dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginBottom="37dp"
+        android:text="Enter Username"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/userpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="301dp"
+        android:text="Enter Password"
+        android:textColor="@color/white" />
+
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="96dp"
+        android:layout_marginBottom="319dp"
+        android:text="Confirm Password"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:id="@+id/NewUserNameEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="143dp"
+        android:ems="10"
+        android:backgroundTint="@color/white"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="239dp"
+        android:ems="10"
+        android:backgroundTint="@color/white"
+        android:inputType="textPassword"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="337dp"
+        android:ems="10"
+        android:backgroundTint="@color/white"
+        android:inputType="textPassword"
+        android:text="" />
+
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:layout_height="95dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="636dp"
+        android:background="@color/black" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width = "match_parent"
-            android:layout_height = "?attr/actionBarSize" />
+    <TextView
+        android:id="@+id/usertitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="65dp"
+        android:text="New User"
+        android:textColor="@color/white" />
 
-  </com.google.android.material.appbar.AppBarLayout>
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="-13dp"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
-  <include layout="@layout/content_create_user"/>
+    <TextView
+        android:id="@+id/AdminPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="172dp"
+        android:layout_marginBottom="140dp"
+        android:text="Enter Admin Password"
+        android:textColor="@color/white" />
 
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-  android:id="@+id/fab"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_gravity="bottom|end"
-  android:layout_marginEnd="@dimen/fab_margin"
-  android:layout_marginBottom="16dp"
-  app:srcCompat="@android:drawable/ic_dialog_email" />
+    <EditText
+        android:id="@+id/AdminPasswordEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginBottom="169dp"
+        android:backgroundTint="@color/white"
+        android:ems="10"
+        android:inputType="textPassword" />
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <RadioButton
+        android:id="@+id/RegularCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="95dp"
+        android:layout_marginBottom="256dp"
+        android:textColor="@color/white"
+        android:buttonTint="@color/white"
+        android:text="Regular User" />
+
+    <RadioButton
+        android:id="@+id/AdminCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="95dp"
+        android:layout_marginBottom="218dp"
+        android:textColor="@color/white"
+        android:buttonTint="@color/white"
+        android:text="Admin User" />
+
+    <Button
+        android:id="@+id/CreateUserSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="150dp"
+        android:layout_marginBottom="54dp"
+        android:backgroundTint="@color/black"
+        android:text="Create" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/BackFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="14dp"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+</RelativeLayout>

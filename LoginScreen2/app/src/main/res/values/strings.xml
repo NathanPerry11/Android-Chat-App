@@ -43,4 +43,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_create_new_user">CreateNewUser</string>
 </resources>
