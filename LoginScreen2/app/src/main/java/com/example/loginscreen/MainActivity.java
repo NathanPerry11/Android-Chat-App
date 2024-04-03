@@ -6,12 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.content.Intent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 public class MainActivity extends AppCompatActivity {
     //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Password",Password);
                 UserNameEntry.setText("");
                 PasswordEntry.setText("");
+
+                Intent intent = new Intent(MainActivity.this, SelectChat.class);
+                startActivity(intent);
 
             }
         });
