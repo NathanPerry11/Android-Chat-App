@@ -1,7 +1,6 @@
 package com.example.loginscreen;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,16 +38,11 @@ public class MainActivity extends AppCompatActivity {
         SubmitBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                //Assign Username and Password box to the variables
                 UserNameEntry = findViewById(R.id.Username);
-                PasswordEntry = findViewById(R.id.Password);
                 UserName = UserNameEntry.getText().toString();
-                Password = PasswordEntry.getText().toString();
-                Log.v("Password",Password);
                 UserNameEntry.setText("");
-                PasswordEntry.setText("");
 
-                Intent intent = new Intent(MainActivity.this, SelectChat.class);
+                Intent intent = new Intent(MainActivity.this, Password.class);
                 startActivity(intent);
 
             }
