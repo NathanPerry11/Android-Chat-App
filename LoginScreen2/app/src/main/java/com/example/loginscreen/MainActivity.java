@@ -1,12 +1,14 @@
 package com.example.loginscreen;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+//        UserNameEntry = findViewById(R.id.Username);
+//        PasswordEntry = findViewById(R.id.Password);
+
         //Assign the actual button to the variable
         SubmitBtn = (Button)findViewById(R.id.Submit);
         CreateBtn = (Button)findViewById(R.id.CreateBtn);
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Password",Password);
                 UserNameEntry.setText("");
                 PasswordEntry.setText("");
+
 
                 Intent intent = new Intent(MainActivity.this, SelectChat.class);
                 startActivity(intent);
