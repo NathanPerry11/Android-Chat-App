@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,10 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView messagesRecyclerView;
     private EditText messageInput;
     private Button sendButton;
-
+    private FirebaseDatabase ChatServer = FirebaseDatabase.getInstance();
     private FloatingActionButton BackBtn;
+    private String UserName = "TestUser2";
+    private int MessageID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String content = messageInput.getText().toString();
                 if (!content.isEmpty()) {
+                    DatabaseReference ref = ChatServer.getReference();
+                    ref.child(UserName).child(""+MessageID).setValue(content);
+                    MessageID++;
                     // Assuming every new message is sent by the user
+
                     messageList.add(new Message(content, true));
                     adapter.notifyItemInserted(messageList.size() - 1);
                     messageInput.setText("");
