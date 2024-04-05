@@ -101,7 +101,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="172dp"
         android:layout_marginTop="65dp"
-        android:text="New User"
+        android:text="@string/new_user"
         android:textColor="@color/white" />
 
     <ImageView
@@ -122,7 +122,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="172dp"
         android:layout_marginBottom="140dp"
-        android:text="Enter Admin Password"
+        android:text="@string/enter_admin_password"
         android:textColor="@color/white" />
 
     <EditText
@@ -147,7 +147,7 @@
         android:layout_marginBottom="256dp"
         android:textColor="@color/white"
         android:buttonTint="@color/white"
-        android:text="Regular User" />
+        android:text="@string/regular_user" />
 
     <RadioButton
         android:id="@+id/AdminCheck"
@@ -159,7 +159,7 @@
         android:layout_marginBottom="218dp"
         android:textColor="@color/white"
         android:buttonTint="@color/white"
-        android:text="Admin User" />
+        android:text="@string/admin_user" />
 
     <Button
         android:id="@+id/CreateUserSubmit"
@@ -182,5 +182,13 @@
         android:layout_marginTop="14dp"
         android:clickable="true"
         app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/CreateUserSubmit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 
 </RelativeLayout>

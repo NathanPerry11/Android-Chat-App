@@ -44,4 +44,8 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_create_new_user">CreateNewUser</string>
+    <string name="new_user">New User</string>
+    <string name="enter_admin_password">Enter Admin Password</string>
+    <string name="regular_user">Regular User</string>
+    <string name="admin_user">Admin User</string>
 </resources>
