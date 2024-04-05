@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,6 +36,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateUser extends AppCompatActivity {
     FloatingActionButton Backbtn;
@@ -44,6 +52,8 @@ public class CreateUser extends AppCompatActivity {
     Button buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +102,22 @@ public class CreateUser extends AppCompatActivity {
                                         // Sign in success, update UI with the signed-in user's information
                                         //FirebaseUser user = mAuth.getCurrentUser();
                                         progressBar.setVisibility(View.GONE);
+                                        Map<String,Object> dbEntry = new HashMap<>();
+                                        //Add user permission ID
+                                        dbEntry.put("Type","Regular");
+                                        //Send entry to the db
+                                        db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                            }
+                                        })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("Firebase", "Error writing document", e);
+                                                    }
+                                                });
 
                                         Toast.makeText(CreateUser.this, "Account Created",
                                                 Toast.LENGTH_SHORT).show();

@@ -24,6 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileWriter;
+
 
 public class MainActivity extends AppCompatActivity {
     //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
@@ -70,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 PasswordEntry.setText("");
 
                 mAuth = FirebaseAuth.getInstance();
-
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                     submitProgressBar.setVisibility(View.GONE);
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     submitProgressBar.setVisibility(View.GONE);

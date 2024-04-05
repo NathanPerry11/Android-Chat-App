@@ -2,19 +2,34 @@ package com.example.loginscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private List<Message> messageList = new ArrayList<>();
@@ -22,10 +37,12 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView messagesRecyclerView;
     private EditText messageInput;
     private Button sendButton;
-    private FirebaseDatabase ChatServer = FirebaseDatabase.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FloatingActionButton BackBtn;
-    private String UserName = "TestUser2";
-    private int MessageID = 0;
+    private String RecieverEmail = "this6@test.com";
+
+    private FirebaseAuth Mauth;
+    private int MessageID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +53,6 @@ public class ChatActivity extends AppCompatActivity {
         messageInput = findViewById(R.id.message_input);
         sendButton = findViewById(R.id.send_button);
         BackBtn = (FloatingActionButton)findViewById(R.id.BackFAB);
-
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MessagesAdapter(messageList);
         messagesRecyclerView.setAdapter(adapter);
@@ -44,11 +60,45 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Get user name
+
+                Mauth = FirebaseAuth.getInstance();
                 String content = messageInput.getText().toString();
+
                 if (!content.isEmpty()) {
-                    DatabaseReference ref = ChatServer.getReference();
-                    ref.child(UserName).child(""+MessageID).setValue(content);
-                    MessageID++;
+                    //Get the logged in users email
+                    String SenderEmail = Mauth.getCurrentUser().getEmail();
+                    //Set up database entry
+                    Map<String,Object> dbEntry = new HashMap<>();
+                    Map<String,String> entryData = new HashMap<>();
+                    //Add content of message and email of sender to entry
+                    entryData.put("Content",content);
+                    entryData.put("Sender",SenderEmail);
+                    //Use timestamp as unique identifier
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+                    dbEntry.put(timeStamp.toString(),entryData);
+                    //Sort sender and reciever emails alphabetically so that id is symmetric regardless of who sent it
+                    String[] AlphabeticalOrder = new String[2];
+                    if (SenderEmail.compareTo(RecieverEmail)>0){
+                        AlphabeticalOrder[0] = SenderEmail;
+                        AlphabeticalOrder[1] = RecieverEmail;
+                    }else{
+                        AlphabeticalOrder[1] = SenderEmail;
+                        AlphabeticalOrder[0] = RecieverEmail;
+                    }
+                    //Send to db
+                    db.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]).update(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Firebase", "Error writing document", e);
+                                }
+                            });
                     // Assuming every new message is sent by the user
 
                     messageList.add(new Message(content, true));
