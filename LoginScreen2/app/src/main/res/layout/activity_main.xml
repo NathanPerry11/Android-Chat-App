@@ -114,6 +114,14 @@
             android:text="Password"
             android:textColor="@color/white" />
 
+        <ProgressBar
+            android:id="@+id/LoginProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Submit"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp"/>
+
         <Button
             android:id="@+id/CreateBtn"
             android:layout_width="wrap_content"

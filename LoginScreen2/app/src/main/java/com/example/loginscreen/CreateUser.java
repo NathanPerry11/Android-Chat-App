@@ -67,7 +67,7 @@ public class CreateUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //
-                //progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 String email, password, passwordConfirmation;
                 email = String.valueOf(UserNameEntry.getText());
                 password = String.valueOf(PasswordEntry.getText());
