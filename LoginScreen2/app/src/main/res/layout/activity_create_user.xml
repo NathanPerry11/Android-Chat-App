@@ -141,30 +141,6 @@
         android:ems="10"
         android:inputType="textPassword" />
 
-    <RadioButton
-        android:id="@+id/RegularCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="95dp"
-        android:layout_marginBottom="256dp"
-        android:textColor="@color/white"
-        android:buttonTint="@color/white"
-        android:text="@string/regular_user" />
-
-    <RadioButton
-        android:id="@+id/AdminCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="95dp"
-        android:layout_marginBottom="218dp"
-        android:textColor="@color/white"
-        android:buttonTint="@color/white"
-        android:text="@string/admin_user" />
-
     <Button
         android:id="@+id/CreateUserSubmit"
         android:layout_width="wrap_content"
@@ -194,5 +170,35 @@
         android:layout_below="@id/CreateUserSubmit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
+
+    <RadioGroup
+        android:layout_width="170dp"
+        android:layout_height="76dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="93dp"
+        android:layout_marginTop="429dp">
+
+        <RadioButton
+            android:id="@+id/RegularCheck"
+            android:layout_width="166dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:buttonTint="@color/white"
+            android:text="@string/regular_user"
+            android:checked="true"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/AdminCheck"
+            android:layout_width="135dp"
+            android:layout_height="19dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:buttonTint="@color/white"
+            android:text="@string/admin_user"
+            android:textColor="@color/white" />
+    </RadioGroup>
 
 </RelativeLayout>

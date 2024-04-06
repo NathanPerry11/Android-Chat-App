@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +54,8 @@ public class CreateUser extends AppCompatActivity {
     Button buttonReg;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-
+    RadioButton RegularUser;
+    RadioButton AdminUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -71,6 +74,8 @@ public class CreateUser extends AppCompatActivity {
         Backbtn = (FloatingActionButton) findViewById(R.id.BackFAB);
         buttonReg = findViewById(R.id.CreateUserSubmit);
         progressBar = findViewById(R.id.progressBar);
+        RegularUser = findViewById(R.id.RegularCheck);
+        AdminUser = findViewById(R.id.AdminCheck);
         //progressBar.setVisibility(View.GONE);
 
         buttonReg.setOnClickListener((new View.OnClickListener() {
@@ -104,7 +109,11 @@ public class CreateUser extends AppCompatActivity {
                                         progressBar.setVisibility(View.GONE);
                                         Map<String,Object> dbEntry = new HashMap<>();
                                         //Add user permission ID
-                                        dbEntry.put("Type","Regular");
+                                        if (AdminUser.isChecked()){
+                                            dbEntry.put("Type","Admin");
+                                        }else{
+                                            dbEntry.put("Type","Regular");
+                                        }
                                         //Send entry to the db
                                         db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
