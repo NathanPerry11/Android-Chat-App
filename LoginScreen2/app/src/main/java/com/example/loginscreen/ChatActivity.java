@@ -91,14 +91,7 @@ public class ChatActivity extends AppCompatActivity {
                         AlphabeticalOrder[1] = SenderEmail;
                         AlphabeticalOrder[0] = RecieverEmail;
                     }
-
-                    //This whole section is basically checking if the chat section of the db exists already
-                    //It seems extremely long winded and annoying but idk how else to do it
-                    final boolean[] existence = {false};
-                    FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-                    DocumentReference docIdRef = rootRef.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]);
-
-                    //Check if chat already exists and if so set the value rather than update
+                    //try to update db section, if it doesn't exist, set the first entry
                     db.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]).update(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
