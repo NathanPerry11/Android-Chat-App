@@ -6,14 +6,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -80,25 +85,45 @@ public class ChatActivity extends AppCompatActivity {
                     //Sort sender and reciever emails alphabetically so that id is symmetric regardless of who sent it
                     String[] AlphabeticalOrder = new String[2];
                     if (SenderEmail.compareTo(RecieverEmail)>0){
-                        AlphabeticalOrder[0] = SenderEmail;
-                        AlphabeticalOrder[1] = RecieverEmail;
+                        AlphabeticalOrder[0] = SenderEmail.replace("@","-");
+                        AlphabeticalOrder[1] = RecieverEmail.replace("@","-");
                     }else{
                         AlphabeticalOrder[1] = SenderEmail;
                         AlphabeticalOrder[0] = RecieverEmail;
                     }
-                    //Send to db
+
+                    //This whole section is basically checking if the chat section of the db exists already
+                    //It seems extremely long winded and annoying but idk how else to do it
+                    final boolean[] existence = {false};
+                    FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+                    DocumentReference docIdRef = rootRef.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]);
+
+                    //Check if chat already exists and if so set the value rather than update
                     db.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]).update(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("Firebase", "DocumentSnapshot successfully written!");
-                                }
-                            })
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firebase", "DocumentSnapshot successfully written!");
+                        }
+                    })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w("Firebase", "Error writing document", e);
+                                    db.collection("Chats").document(AlphabeticalOrder[0]+"+"+AlphabeticalOrder[1]).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w("Firebase", "Error writing document", e);
+                                                }
+                                            });
                                 }
                             });
+
                     // Assuming every new message is sent by the user
 
                     messageList.add(new Message(content, true));
