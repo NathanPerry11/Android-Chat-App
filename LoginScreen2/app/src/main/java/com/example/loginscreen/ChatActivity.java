@@ -9,6 +9,7 @@ import android.widget.EditText;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -157,19 +158,23 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
-                    Map<String,Object> entries= task.getResult().getData();
-                    for (String e: entries.keySet()){
-                        Map<String,String> entry = (Map<String, String>) entries.get(e);
-                        String message = entry.get("Content");
-                        Log.v("Firebase",message);
-                        if (entry.get("Sender").equals(SenderEmail)){
-                            messageList.add(new Message(message, true));
-                        }else{
-                            messageList.add(new Message(message, false));
-                        }
-                        adapter.notifyItemInserted(messageList.size() - 1);
-                        messagesRecyclerView.scrollToPosition(messageList.size() - 1);
+                    try{
+                        Map<String,Object> entries= task.getResult().getData();
+                        for (String e: entries.keySet()){
+                            Map<String,String> entry = (Map<String, String>) entries.get(e);
+                            String message = entry.get("Content");
+                            Log.v("Firebase",message);
+                            if (entry.get("Sender").equals(SenderEmail)){
+                                messageList.add(new Message(message, true));
+                            }else{
+                                messageList.add(new Message(message, false));
+                            }
+                            adapter.notifyItemInserted(messageList.size() - 1);
+                            messagesRecyclerView.scrollToPosition(messageList.size() - 1);
 
+                        }
+                    }catch (NullPointerException e){
+                        Log.v("Chats","New chat");
                     }
                 }
             }
