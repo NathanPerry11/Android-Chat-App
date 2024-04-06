@@ -2,6 +2,8 @@ package com.example.loginscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,9 @@ public class SelectChat extends AppCompatActivity {
 
         ChatListAdapter adapter = new ChatListAdapter(chatList, chat -> {
             Intent intent = new Intent(SelectChat.this, ChatActivity.class);
+            EditText searchBar = findViewById(R.id.search);
+            String RecEmail = searchBar.getText().toString();
+            intent.putExtra("reciever",RecEmail);
             intent.putExtra("chatId", chat.getChatId());
             startActivity(intent);
         });

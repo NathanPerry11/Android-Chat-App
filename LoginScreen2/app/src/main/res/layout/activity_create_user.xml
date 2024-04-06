@@ -52,6 +52,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="92dp"
         android:layout_marginTop="143dp"
+        android:textColor="@color/white"
         android:ems="10"
         android:backgroundTint="@color/white"
         android:inputType="text" />
@@ -63,6 +64,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="92dp"
+        android:textColor="@color/white"
         android:layout_marginTop="239dp"
         android:ems="10"
         android:backgroundTint="@color/white"
@@ -77,6 +79,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="92dp"
         android:layout_marginTop="337dp"
+        android:textColor="@color/white"
         android:ems="10"
         android:backgroundTint="@color/white"
         android:inputType="textPassword"
@@ -134,6 +137,7 @@
         android:layout_marginStart="92dp"
         android:layout_marginBottom="169dp"
         android:backgroundTint="@color/white"
+        android:textColor="@color/white"
         android:ems="10"
         android:inputType="textPassword" />
 
