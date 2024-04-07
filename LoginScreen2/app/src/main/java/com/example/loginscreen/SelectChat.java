@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,8 +58,22 @@ public class SelectChat extends AppCompatActivity {
         ReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectChat.this, CheckReport.class);
-                startActivity(intent);
+                String UserEmail = Mauth.getCurrentUser().getEmail();
+                db.collection("Users").document(UserEmail).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String permission = task.getResult().getData().get("Type").toString();
+                        if (permission.equals("Admin")){
+                            Intent intent = new Intent(SelectChat.this, CheckReport.class);
+                            startActivity(intent);
+                        }else{
+                            ProgressBar permissionBar = findViewById(R.id.PermissionBar);
+                            permissionBar.setVisibility(View.VISIBLE);
+                            Toast.makeText(SelectChat.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                            permissionBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }
         });
         searchBtn.setOnClickListener(new View.OnClickListener() {

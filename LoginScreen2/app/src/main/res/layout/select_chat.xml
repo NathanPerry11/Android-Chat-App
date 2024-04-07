@@ -73,4 +73,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="270dp" />
 
+    <ProgressBar
+        android:id="@+id/PermissionBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ViewReportBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
