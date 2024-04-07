@@ -159,7 +159,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
                     try{
-                        Map<String,Object> entries= task.getResult().getData();
+                        Map<String,Object> entries = task.getResult().getData();
                         for (String e: entries.keySet()){
                             Map<String,String> entry = (Map<String, String>) entries.get(e);
                             String message = entry.get("Content");
