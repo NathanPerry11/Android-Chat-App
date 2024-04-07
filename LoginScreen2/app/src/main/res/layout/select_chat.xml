@@ -30,6 +30,14 @@
             android:inputType="text"
             android:maxLines="1"
             android:singleLine="true" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/SearchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@android:drawable/ic_menu_search"
+            tools:layout_editor_absoluteX="130dp"
+            tools:layout_editor_absoluteY="3dp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -47,13 +55,22 @@
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/chat_item" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/SearchBtn"
+    <Button
+        android:id="@+id/ViewReportBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@android:drawable/ic_menu_search"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="3dp" />
+        android:layout_marginBottom="70dp"
+        android:text="View Reports"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="270dp" />
+
+    <Button
+        android:id="@+id/LogoutButton"
+        android:layout_width="121dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="270dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

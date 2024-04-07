@@ -48,4 +48,5 @@
     <string name="enter_admin_password">Enter Admin Password</string>
     <string name="regular_user">Regular User</string>
     <string name="admin_user">Admin User</string>
+    <string name="title_activity_check_report">CheckReport</string>
 </resources>

@@ -46,16 +46,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CreateUser extends AppCompatActivity {
-    FloatingActionButton Backbtn;
+    private FloatingActionButton Backbtn;
     //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
-    TextView UserNameEntry;
-    TextView PasswordEntry;
-    TextView PasswordConfirmationEntry;
-    Button buttonReg;
-    FirebaseAuth mAuth;
-    ProgressBar progressBar;
-    RadioButton RegularUser;
-    RadioButton AdminUser;
+    private TextView UserNameEntry;
+    private TextView PasswordEntry;
+    private TextView PasswordConfirmationEntry;
+    private Button buttonReg;
+    private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
+    private RadioButton RegularUser;
+    private RadioButton AdminUser;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -87,67 +87,7 @@ public class CreateUser extends AppCompatActivity {
                 email = String.valueOf(UserNameEntry.getText());
                 password = String.valueOf(PasswordEntry.getText());
                 passwordConfirmation = String.valueOf(PasswordConfirmationEntry.getText());
-
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(CreateUser.this, "Enter email", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(CreateUser.this, "Enter email", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-                if (passwordConfirmation.equals(password)){
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
-                                        //FirebaseUser user = mAuth.getCurrentUser();
-                                        progressBar.setVisibility(View.GONE);
-                                        Map<String,Object> dbEntry = new HashMap<>();
-                                        //Add user permission ID
-                                        if (AdminUser.isChecked()){
-                                            dbEntry.put("Type","Admin");
-                                        }else{
-                                            dbEntry.put("Type","Regular");
-                                        }
-                                        //Send entry to the db
-                                        db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("Firebase", "DocumentSnapshot successfully written!");
-                                            }
-                                        })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("Firebase", "Error writing document", e);
-                                                    }
-                                                });
-
-                                        Toast.makeText(CreateUser.this, "Account Created",
-                                                Toast.LENGTH_SHORT).show();
-                                        // Move to MainActivity (login page) after successful registration
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        finish(); // Optional: finish this activity so the user cannot navigate back to it
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Toast.makeText(CreateUser.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                    //
-                }else{
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(CreateUser.this, "Passwords don't match.",
-                            Toast.LENGTH_SHORT).show();
-                }
-
+                CreateUser(email,password,passwordConfirmation);
             }
         }));
         Backbtn.setOnClickListener(new View.OnClickListener(){
@@ -165,6 +105,68 @@ public class CreateUser extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void CreateUser(String email,String password,String passwordConfirmation){
+        if (TextUtils.isEmpty(email)){
+            Toast.makeText(CreateUser.this, "Enter email", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(CreateUser.this, "Enter email", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        if (passwordConfirmation.equals(password)){
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                //FirebaseUser user = mAuth.getCurrentUser();
+                                progressBar.setVisibility(View.GONE);
+                                Map<String,Object> dbEntry = new HashMap<>();
+                                //Add user permission ID
+                                if (AdminUser.isChecked()){
+                                    dbEntry.put("Type","Admin");
+                                }else{
+                                    dbEntry.put("Type","Regular");
+                                }
+                                //Send entry to the db
+                                db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("Firebase", "DocumentSnapshot successfully written!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("Firebase", "Error writing document", e);
+                                            }
+                                        });
+
+                                Toast.makeText(CreateUser.this, "Account Created",
+                                        Toast.LENGTH_SHORT).show();
+                                // Move to MainActivity (login page) after successful registration
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                finish(); // Optional: finish this activity so the user cannot navigate back to it
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(CreateUser.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+            //
+        }else{
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(CreateUser.this, "Passwords don't match.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

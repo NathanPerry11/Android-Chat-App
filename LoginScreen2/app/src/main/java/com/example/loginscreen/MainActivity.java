@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
     EditText UserNameEntry;
     EditText PasswordEntry;
     TextView Display;
-
-    String email, password;
     ProgressBar submitProgressBar;
 
     FirebaseAuth mAuth;
@@ -68,46 +66,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
                 //Assign Username and Password box to the variables
                 submitProgressBar.setVisibility(View.VISIBLE);
-                email = UserNameEntry.getText().toString();
-                password = PasswordEntry.getText().toString();
-                Log.v("Password", password);
+                String email = UserNameEntry.getText().toString();
+                String password = PasswordEntry.getText().toString();
                 UserNameEntry.setText("");
                 PasswordEntry.setText("");
+                LogInUser(email,password);
 
-                mAuth = FirebaseAuth.getInstance();
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
-                    submitProgressBar.setVisibility(View.GONE);
-                    return;
-                }
-                if (TextUtils.isEmpty(password)){
-                    Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
-                    submitProgressBar.setVisibility(View.GONE);
-                    return;
-                }
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
 
-                                    // Sign in success, update UI with the signed-in user's information
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    submitProgressBar.setVisibility(View.GONE);
-                                    Toast.makeText(getApplicationContext(), "Login Successful",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), SelectChat.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    submitProgressBar.setVisibility(View.GONE);
-                                    Toast.makeText(MainActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
 
             }
         });
@@ -121,12 +86,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        System.out.println(email);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void LogInUser(String email,String password){
+        mAuth = FirebaseAuth.getInstance();
+        if (TextUtils.isEmpty(email)){
+            Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
+            submitProgressBar.setVisibility(View.GONE);
+            return;
+        }
+        if (TextUtils.isEmpty(password)){
+            Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
+            submitProgressBar.setVisibility(View.GONE);
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            submitProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(getApplicationContext(), "Login Successful",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), SelectChat.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            submitProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
 }
