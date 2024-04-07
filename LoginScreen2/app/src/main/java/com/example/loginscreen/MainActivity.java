@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     Button CreateBtn;
     EditText UserNameEntry;
     EditText PasswordEntry;
-    TextView Display;
 
     String email, password;
     ProgressBar submitProgressBar;
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     String sessionKey;
-    long sessionDurationInMillis = 3600000;
+    long sessionDurationInMillis = 3600000; // 1 hour in ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

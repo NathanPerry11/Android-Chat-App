@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class FirebaseUtil {
 
-    // Define an interface for callback methods
     public interface FirestoreSessionCallback {
         void onSuccess();
         void onFailure(Exception e);
@@ -16,13 +15,14 @@ public class FirebaseUtil {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         long currentTime = System.currentTimeMillis();
-        long sessionDuration = 3600000; // For example, 1 hour = 3600000 milliseconds
+        long sessionDuration = 3600000;
         long expirationTime = currentTime + sessionDuration;
 
         Map<String, Object> sessionInfo = new HashMap<>();
         sessionInfo.put("sessionKey", sessionKey);
         sessionInfo.put("expirationTime", expirationTime);
 
+        // assume userSessions collection in database
         db.collection("userSessions").document(userId).set(sessionInfo)
                 .addOnSuccessListener(aVoid -> {
                     if (callback != null) callback.onSuccess();
