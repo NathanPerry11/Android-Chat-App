@@ -52,9 +52,8 @@
             android:id="@+id/Password"
             android:layout_width="210dp"
             android:layout_height="45dp"
-            android:layout_marginStart="95dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="300dp"
-            android:layout_marginEnd="106dp"
             android:layout_marginBottom="240dp"
             android:backgroundTint="@color/white"
             android:ems="10"
@@ -69,9 +68,8 @@
             android:id="@+id/Username"
             android:layout_width="210dp"
             android:layout_height="45dp"
-            android:layout_marginStart="96dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="200dp"
-            android:layout_marginEnd="106dp"
             android:layout_marginBottom="37dp"
             android:backgroundTint="@color/white"
             android:textColor="@color/white"
@@ -88,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
-            android:layout_marginTop="400dp"
+            android:layout_marginTop="425dp"
             android:layout_marginEnd="106dp"
             android:layout_marginBottom="37dp"
             android:backgroundTint="@color/black"
@@ -98,9 +96,8 @@
             android:id="@+id/UsernameLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="260dp"
-            android:layout_marginEnd="106dp"
             android:layout_marginBottom="37dp"
             android:text="User Name"
             android:textColor="@color/white" />
@@ -109,9 +106,8 @@
             android:id="@+id/PasswordLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="350dp"
-            android:layout_marginEnd="106dp"
             android:layout_marginBottom="37dp"
             android:text="Password"
             android:textColor="@color/white" />
@@ -122,18 +118,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/Submit"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="13dp"/>
-
-        <Button
-            android:id="@+id/CreateBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="145dp"
-            android:layout_marginTop="525dp"
-            android:layout_marginEnd="85dp"
-            android:layout_marginBottom="37dp"
-            android:backgroundTint="@color/black"
-            android:text="Create User" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="480dp"
+            android:progressTint="@android:color/white"/>
 
     </androidx.cardview.widget.CardView>
 

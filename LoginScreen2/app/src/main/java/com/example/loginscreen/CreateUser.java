@@ -56,6 +56,7 @@ public class CreateUser extends AppCompatActivity {
     ProgressBar progressBar;
     RadioButton RegularUser;
     RadioButton AdminUser;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -76,7 +77,7 @@ public class CreateUser extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         RegularUser = findViewById(R.id.RegularCheck);
         AdminUser = findViewById(R.id.AdminCheck);
-        //progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
 
         buttonReg.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -111,8 +112,12 @@ public class CreateUser extends AppCompatActivity {
                                         //Add user permission ID
                                         if (AdminUser.isChecked()){
                                             dbEntry.put("Type","Admin");
-                                        }else{
+                                        }else if (RegularUser.isChecked()){
                                             dbEntry.put("Type","Regular");
+                                        }else{
+                                            Toast.makeText(CreateUser.this, "Please select user status",
+                                                Toast.LENGTH_SHORT).show();
+                                                return;
                                         }
                                         //Send entry to the db
                                         db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -131,7 +136,7 @@ public class CreateUser extends AppCompatActivity {
                                         Toast.makeText(CreateUser.this, "Account Created",
                                                 Toast.LENGTH_SHORT).show();
                                         // Move to MainActivity (login page) after successful registration
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        Intent intent = new Intent(getApplicationContext(), SelectChat.class);
                                         startActivity(intent);
                                         finish(); // Optional: finish this activity so the user cannot navigate back to it
                                     } else {
@@ -154,7 +159,7 @@ public class CreateUser extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 //Redirect to Create User page
-                Intent intent = new Intent(CreateUser.this, MainActivity.class);
+                Intent intent = new Intent(CreateUser.this, SelectChat.class);
                 startActivity(intent);
 
             }
