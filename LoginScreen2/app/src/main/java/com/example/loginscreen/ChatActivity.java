@@ -42,6 +42,8 @@ public class ChatActivity extends AppCompatActivity {
     private String chatIdentifier;
     private FirebaseAuth Mauth;
 
+    private TopLevelController TLC = new TopLevelController();
+
     private Button ReportBtn;
 
     private Map<String,Object> Reportdata;
@@ -88,7 +90,11 @@ public class ChatActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SendChatToDB();
+                try {
+                    SendChatToDB();
+                } catch (Exception e) {
+
+                }
             }
         });
         //Redirect to select chat on back button click
@@ -107,7 +113,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Log.v("F","click");
-                ReportChat();
+                try {
+                    ReportChat();
+                } catch (Exception e) {
+                }
 
             }
         });
@@ -153,88 +162,20 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    private void SendChatToDB(){
+    private void SendChatToDB() throws Exception {
         String content = messageInput.getText().toString();
-
-        if (!content.isEmpty()) {
-
-            //Set up database entry
-            Map<String, Object> dbEntry = new HashMap<>();
-            Map<String, String> entryData = new HashMap<>();
-
-
-            //Add content of message and email of sender to entry
-            entryData.put("Content", content);
-            entryData.put("Sender", SenderEmail);
-
-
-            //Use timestamp as unique identifier
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-            dbEntry.put(timeStamp.toString(), entryData);
-
-
-            //try to update db section, if it doesn't exist, set the first entry
-            db.collection("Chats").document(chatIdentifier).update(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Firebase", "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("Firebase", "Error writing document", e);
-                            db.collection("Chats").document(chatIdentifier).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d("Firebase", "DocumentSnapshot successfully written!");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("Firebase", "Error writing document", e);
-                                        }
-                                    });
-                        }
-                    });
+        TLC.SendChatDBReq(chatIdentifier,SenderEmail,content);
 
             // Assuming every new message is sent by the user
 
-            messageList.add(new Message(content, true));
-            adapter.notifyItemInserted(messageList.size() - 1);
-            messageInput.setText("");
-            messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to the bottom
-        }
+        messageList.add(new Message(content, true));
+        adapter.notifyItemInserted(messageList.size() - 1);
+        messageInput.setText("");
+        messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to the bottom
     }
 
-    private void ReportChat(){
-        db.collection("Chats").document(chatIdentifier).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    try{
-                        Reportdata = task.getResult().getData();
-                        Map<String,Object> header = new HashMap<>();
-                        header.put("Reason","Inappropriate");
-                        db.collection("Reports").document(chatIdentifier).set(header);
-                        for(String s: Reportdata.keySet()){
-                            Log.v("S",s);
-                            Map<String,Object> entry = new HashMap<>();
-                            entry.put(s,Reportdata.get(s));
-                            db.collection("Reports").document(chatIdentifier).update(entry).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.v("F","failed");
-                                }
-                            });
-                        }
-                    }catch (NullPointerException e){
-                        Log.v("V","Empty Chat");
-                    }
-                }
-            }
-        });
+    private void ReportChat() throws Exception {
+        TLC.ReportChatReq(chatIdentifier);
 
     }
 }

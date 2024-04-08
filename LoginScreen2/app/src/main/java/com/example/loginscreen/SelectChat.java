@@ -1,7 +1,5 @@
 package com.example.loginscreen;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,20 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.jetbrains.annotations.Async;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +32,11 @@ public class SelectChat extends AppCompatActivity {
     private FloatingActionButton searchBtn;
     private Button ReportBtn;
     private Button LogoutBtn;
-    private String searchEntry;
-
+    private Button CreateButton;
     private FirebaseAuth Mauth = FirebaseAuth.getInstance();
+    private String UserEmail = Mauth.getCurrentUser().getEmail();
+
+    private TopLevelController TLC = new TopLevelController();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -54,11 +48,32 @@ public class SelectChat extends AppCompatActivity {
         LogoutBtn = findViewById(R.id.LogoutButton);
         EditText searchBar = findViewById(R.id.search);
         ReportBtn = findViewById(R.id.ViewReportBtn);
+        CreateButton = findViewById(R.id.CreateBtn);
+
+        CreateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Redirect to Create User page
+                db.collection("Users").document(UserEmail).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String permission = task.getResult().getData().get("Type").toString();
+                        if (permission.equals("Admin")){
+                            Intent intent = new Intent(SelectChat.this, CreateUser.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(SelectChat.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                });
+
+            }
+        });
 
         ReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String UserEmail = Mauth.getCurrentUser().getEmail();
                 db.collection("Users").document(UserEmail).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -76,6 +91,7 @@ public class SelectChat extends AppCompatActivity {
                 });
             }
         });
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,11 +104,13 @@ public class SelectChat extends AppCompatActivity {
         LogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TLC.SignOutReq();
                 Mauth.signOut();
                 Intent intent = new Intent(SelectChat.this, MainActivity.class);
                 startActivity(intent);
             }
         });
+
 
         RecyclerView chatListRecyclerView = findViewById(R.id.chat_list_recycler_view);
         chatListRecyclerView.setLayoutManager(new LinearLayoutManager(this));

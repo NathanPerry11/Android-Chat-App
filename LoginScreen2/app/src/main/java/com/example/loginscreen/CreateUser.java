@@ -56,6 +56,8 @@ public class CreateUser extends AppCompatActivity {
     private ProgressBar progressBar;
     private RadioButton RegularUser;
     private RadioButton AdminUser;
+
+    private TopLevelController TLC = new TopLevelController();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -87,7 +89,7 @@ public class CreateUser extends AppCompatActivity {
                 email = String.valueOf(UserNameEntry.getText());
                 password = String.valueOf(PasswordEntry.getText());
                 passwordConfirmation = String.valueOf(PasswordConfirmationEntry.getText());
-                CreateUser(email,password,passwordConfirmation);
+                CreateNewUser(email,password,passwordConfirmation);
             }
         }));
         Backbtn.setOnClickListener(new View.OnClickListener(){
@@ -107,7 +109,7 @@ public class CreateUser extends AppCompatActivity {
         });
     }
 
-    private void CreateUser(String email,String password,String passwordConfirmation){
+    private void CreateNewUser(String email,String password,String passwordConfirmation){
         if (TextUtils.isEmpty(email)){
             Toast.makeText(CreateUser.this, "Enter email", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
@@ -128,25 +130,20 @@ public class CreateUser extends AppCompatActivity {
                                 //FirebaseUser user = mAuth.getCurrentUser();
                                 progressBar.setVisibility(View.GONE);
                                 Map<String,Object> dbEntry = new HashMap<>();
+                                String type;
                                 //Add user permission ID
                                 if (AdminUser.isChecked()){
-                                    dbEntry.put("Type","Admin");
+                                    type = "Admin";
                                 }else{
-                                    dbEntry.put("Type","Regular");
+                                    type = "Regular";
+                                }
+                                try {
+                                    TLC.UserCreateReq(type,email);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
                                 }
                                 //Send entry to the db
-                                db.collection("Users").document(email).set(dbEntry).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("Firebase", "DocumentSnapshot successfully written!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("Firebase", "Error writing document", e);
-                                            }
-                                        });
+
 
                                 Toast.makeText(CreateUser.this, "Account Created",
                                         Toast.LENGTH_SHORT).show();

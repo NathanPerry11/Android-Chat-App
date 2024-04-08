@@ -33,11 +33,8 @@ import java.io.FileWriter;
 public class MainActivity extends AppCompatActivity {
     //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
     Button SubmitBtn;
-
-    Button CreateBtn;
     EditText UserNameEntry;
     EditText PasswordEntry;
-    TextView Display;
     ProgressBar submitProgressBar;
 
     FirebaseAuth mAuth;
@@ -54,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Assign the actual button to the variable
         SubmitBtn = (Button)findViewById(R.id.Submit);
-        CreateBtn = (Button)findViewById(R.id.CreateBtn);
 
         UserNameEntry = findViewById(R.id.Username);
         PasswordEntry = findViewById(R.id.Password);
@@ -73,15 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 LogInUser(email,password);
 
 
-
-            }
-        });
-        CreateBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //Redirect to Create User page
-                Intent intent = new Intent(MainActivity.this, CreateUser.class);
-                startActivity(intent);
 
             }
         });
