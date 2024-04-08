@@ -34,15 +34,17 @@ public class MainActivity extends AppCompatActivity {
     //Defining a variable for every attribute in the application UI (one for the button, one for the username box etc...)
     Button SubmitBtn;
 
-
+    Button CreateBtn;
     EditText UserNameEntry;
     EditText PasswordEntry;
-    TextView Display;
 
     String email, password;
     ProgressBar submitProgressBar;
 
     FirebaseAuth mAuth;
+
+    String sessionKey;
+    long sessionDurationInMillis = 3600000; // 1 hour in ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
         //Assign the actual button to the variable
         SubmitBtn = (Button)findViewById(R.id.Submit);
 
-
         UserNameEntry = findViewById(R.id.Username);
         PasswordEntry = findViewById(R.id.Password);
+        mAuth = FirebaseAuth.getInstance();
 
         submitProgressBar = findViewById(R.id.LoginProgressBar);
-        submitProgressBar.setVisibility(View.GONE);
         //Set click listener to do something when it clicks
         SubmitBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 UserNameEntry.setText("");
                 PasswordEntry.setText("");
 
-                mAuth = FirebaseAuth.getInstance();
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(MainActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                     submitProgressBar.setVisibility(View.GONE);
@@ -86,17 +86,31 @@ public class MainActivity extends AppCompatActivity {
                     submitProgressBar.setVisibility(View.GONE);
                     return;
                 }
+
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    submitProgressBar.setVisibility(View.GONE);
-                                    Toast.makeText(getApplicationContext(), "Login Successful",
-                                            Toast.LENGTH_SHORT).show();
+                                    assert user != null;
+                                    sessionKey = SecurityUtil.generateSecureSessionKey();
+                                    if (sessionKey != null) {
+                                        FirebaseUtil.storeSessionKeyInFirestore(user.getUid(), sessionKey, new FirebaseUtil.FirestoreSessionCallback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                Toast.makeText(getApplicationContext(), "Session key stored successfully.", Toast.LENGTH_SHORT).show();
+                                            }
+                                            @Override
+                                            public void onFailure(Exception e) {
+                                                Toast.makeText(MainActivity.this, "Failed to store session key. Please try again.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        // Handle the case where sessionKey is null
+                                        Toast.makeText(MainActivity.this, "Error generating session key. Please try again.", Toast.LENGTH_SHORT).show();
+                                    }
                                     Intent intent = new Intent(getApplicationContext(), SelectChat.class);
                                     startActivity(intent);
                                     finish();
@@ -106,14 +120,21 @@ public class MainActivity extends AppCompatActivity {
                                     submitProgressBar.setVisibility(View.GONE);
                                     Toast.makeText(MainActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
-
                                 }
                             }
                         });
 
             }
         });
+        CreateBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //Redirect to Create User page
+                Intent intent = new Intent(MainActivity.this, CreateUser.class);
+                startActivity(intent);
 
+            }
+        });
 
         System.out.println(email);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
